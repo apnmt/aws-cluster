@@ -3,6 +3,16 @@ output "api_gateway_invoke_url" {
   value       = aws_api_gateway_deployment.deployment.invoke_url
 }
 
+output "cognito_user_pool_id" {
+  description = "User Pool Id"
+  value       = aws_cognito_user_pool.apnmt_user_pool.id
+}
+
+output "cognito_user_pool_client_id" {
+  description = "User Pool Client Id"
+  value       = aws_cognito_user_pool_client.apnmt_user_pool_client.id
+}
+
 output "appointmentservice_endpoint_url" {
   description = "Appointmentservice endpoint url"
   value       = module.appointmentservice-application.elb_endpoint_url
