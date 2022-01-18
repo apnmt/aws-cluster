@@ -13,27 +13,30 @@ module "appointmentservice-application" {
   aws_secret_key   = var.aws_secret_key
 }
 
+###############
+# API_Gateway #
+###############
 resource "aws_api_gateway_resource" "appointment" {
   rest_api_id = aws_api_gateway_rest_api.api.id
   parent_id   = aws_api_gateway_resource.service.id
   path_part   = "appointment"
 }
 
-resource "aws_api_gateway_resource" "api_resource" {
+resource "aws_api_gateway_resource" "appointment_api_resource" {
   rest_api_id = aws_api_gateway_rest_api.api.id
   parent_id   = aws_api_gateway_resource.appointment.id
   path_part   = "api"
 }
 
-resource "aws_api_gateway_resource" "proxy" {
+resource "aws_api_gateway_resource" "appointment_proxy" {
   rest_api_id = aws_api_gateway_rest_api.api.id
-  parent_id   = aws_api_gateway_resource.api_resource.id
+  parent_id   = aws_api_gateway_resource.appointment_api_resource.id
   path_part   = "{proxy+}"
 }
 
-resource "aws_api_gateway_method" "get" {
+resource "aws_api_gateway_method" "appointment_get" {
   rest_api_id        = aws_api_gateway_rest_api.api.id
-  resource_id        = aws_api_gateway_resource.proxy.id
+  resource_id        = aws_api_gateway_resource.appointment_proxy.id
   http_method        = "GET"
   authorization      = "NONE"
   request_parameters = {
@@ -41,9 +44,9 @@ resource "aws_api_gateway_method" "get" {
   }
 }
 
-resource "aws_api_gateway_method" "post" {
+resource "aws_api_gateway_method" "appointment_post" {
   rest_api_id        = aws_api_gateway_rest_api.api.id
-  resource_id        = aws_api_gateway_resource.proxy.id
+  resource_id        = aws_api_gateway_resource.appointment_proxy.id
   http_method        = "POST"
   authorization      = "COGNITO_USER_POOLS"
   authorizer_id      = aws_api_gateway_authorizer.api_authorizer.id
@@ -52,10 +55,10 @@ resource "aws_api_gateway_method" "post" {
   }
 }
 
-resource "aws_api_gateway_integration" "get_integration" {
+resource "aws_api_gateway_integration" "appointment_get_integration" {
   rest_api_id             = aws_api_gateway_rest_api.api.id
-  resource_id             = aws_api_gateway_resource.proxy.id
-  http_method             = aws_api_gateway_method.get.http_method
+  resource_id             = aws_api_gateway_resource.appointment_proxy.id
+  http_method             = aws_api_gateway_method.appointment_get.http_method
   integration_http_method = "ANY"
   type                    = "HTTP_PROXY"
   uri                     = "http://${module.appointmentservice-application.elb_endpoint_url}/api/{proxy}"
@@ -65,10 +68,10 @@ resource "aws_api_gateway_integration" "get_integration" {
   }
 }
 
-resource "aws_api_gateway_integration" "post_integration" {
+resource "aws_api_gateway_integration" "appointment_post_integration" {
   rest_api_id             = aws_api_gateway_rest_api.api.id
-  resource_id             = aws_api_gateway_resource.proxy.id
-  http_method             = aws_api_gateway_method.post.http_method
+  resource_id             = aws_api_gateway_resource.appointment_proxy.id
+  http_method             = aws_api_gateway_method.appointment_post.http_method
   integration_http_method = "ANY"
   type                    = "HTTP_PROXY"
   uri                     = "http://${module.appointmentservice-application.elb_endpoint_url}/api/{proxy}"
