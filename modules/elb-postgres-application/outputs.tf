@@ -15,8 +15,14 @@ output "rds_username" {
   value       = aws_db_instance.rds-instance.username
   sensitive   = true
 }
+
 output "rds_password" {
   description = "RDS instance root password"
   value       = aws_db_instance.rds-instance.password
   sensitive   = true
+}
+
+output "elb_endpoint_url" {
+  description = "ELB endpoint url"
+  value       = aws_elastic_beanstalk_environment.environment.endpoint_url
 }

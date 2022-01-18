@@ -27,7 +27,7 @@ terraform {
     organization = "apnmt"
 
     workspaces {
-      name = "apnmt_gh_actions"
+      name = "apnmt_aws"
     }
   }
 }

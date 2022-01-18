@@ -1,3 +1,13 @@
+output "api_gateway_invoke_url" {
+  description = "Url to invoke Api Gateway"
+  value       = aws_api_gateway_deployment.deployment.invoke_url
+}
+
+output "appointmentservice_endpoint_url" {
+  description = "Appointmentservice endpoint url"
+  value       = module.appointmentservice-application.elb_endpoint_url
+}
+
 output "appointmentservice_rds_hostname" {
   description = "Appointmentservice RDS instance hostname"
   value       = module.appointmentservice-application.rds_hostname
