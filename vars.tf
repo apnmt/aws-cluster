@@ -3,15 +3,18 @@ variable "environment" {
   description = "Environment Name"
 }
 
-variable "public_subnets" {
-  type = list(string)
-}
-
-variable "vpc_id" {
-  type = string
-}
-
 variable "region" {
   default     = "eu-central-1"
   description = "AWS region"
+}
+
+variable "aws_access_key" {
+  type        = string
+  description = "AWS AccessKey"
+  sensitive   = true
+}
+variable "aws_secret_key" {
+  type        = string
+  description = "AWS SecretKey"
+  sensitive   = true
 }
