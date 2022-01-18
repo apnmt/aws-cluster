@@ -13,7 +13,9 @@ module "organization-appointmentservice-application" {
   aws_secret_key      = var.aws_secret_key
 }
 
-# ---------- Appointment Queue ----------
+#####################
+# Appointment Queue #
+#####################
 resource "aws_sqs_queue" "appointment-queue" {
   name                       = "appointment-queue"
   visibility_timeout_seconds = 300
@@ -23,7 +25,7 @@ resource "aws_sqs_queue" "appointment-queue" {
   }
 }
 
-resource "aws_sns_topic_subscription" "results_updates_sqs_target" {
+resource "aws_sns_topic_subscription" "appointment_sqs_target" {
   topic_arn = aws_sns_topic.appointment-changed.arn
   protocol  = "sqs"
   endpoint  = aws_sqs_queue.appointment-queue.arn
@@ -54,7 +56,9 @@ resource "aws_sqs_queue_policy" "appointment_queue_policy" {
 POLICY
 }
 
-# ---------- Service Queue ----------
+#################
+# Service Queue #
+#################
 resource "aws_sqs_queue" "service-queue" {
   name                       = "service-queue"
   visibility_timeout_seconds = 300
@@ -64,7 +68,7 @@ resource "aws_sqs_queue" "service-queue" {
   }
 }
 
-resource "aws_sns_topic_subscription" "results_updates_sqs_target" {
+resource "aws_sns_topic_subscription" "service_sqs_target" {
   topic_arn = aws_sns_topic.service-changed.arn
   protocol  = "sqs"
   endpoint  = aws_sqs_queue.service-queue.arn
