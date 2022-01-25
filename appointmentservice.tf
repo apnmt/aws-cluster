@@ -2,6 +2,7 @@ module "appointmentservice-application" {
   source = "./modules/elb-postgres-application"
 
   application_name = "appointmentservice"
+  s3_bucket_id     = var.s3_bucket_id
   environment      = var.environment
   db_instance_type = "db.t2.micro"
   instance_type    = "t2.micro"

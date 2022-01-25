@@ -1,15 +1,21 @@
 # Create elastic beanstalk application
-
-
 resource "aws_elastic_beanstalk_application" "application" {
   name = var.application_name
 }
 
-# Create elastic beanstalk Environment
+# Create elastic beanstalk application version
+resource "aws_elastic_beanstalk_application_version" "version" {
+  name        = aws_elastic_beanstalk_application.application.name
+  application = aws_elastic_beanstalk_application.application.name
+  bucket      = var.s3_bucket_id
+  key         = "${var.application_name}.jar"
+}
 
+# Create elastic beanstalk Environment
 resource "aws_elastic_beanstalk_environment" "environment" {
   name                = "${var.application_name}-${var.environment}"
   application         = aws_elastic_beanstalk_application.application.name
+  version_label       = aws_elastic_beanstalk_application_version.version.name
   solution_stack_name = var.solution_stack_name
   tier                = var.tier
 
@@ -114,5 +120,4 @@ resource "aws_elastic_beanstalk_environment" "environment" {
     namespace = "aws:elasticbeanstalk:application:environment"
     value     = "jdbc:postgresql://${aws_db_instance.rds-instance.address}:${aws_db_instance.rds-instance.port}/${aws_db_instance.rds-instance.name}"
   }
-
 }

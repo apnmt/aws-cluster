@@ -2,6 +2,7 @@ module "organization-appointmentservice-application" {
   source = "./modules/elb-documentdb-application"
 
   application_name    = "organizationappointmentservice"
+  s3_bucket_id        = var.s3_bucket_id
   environment         = var.environment
   docdb_instance_type = "db.t3.medium"
   instance_type       = "t2.micro"
