@@ -1,4 +1,4 @@
-module "organization-appointmentservice-application" {
+/*module "organization-appointmentservice-application" {
   source = "./modules/elb-documentdb-application"
 
   application_name    = "organizationappointmentservice"
@@ -166,4 +166,4 @@ resource "aws_sqs_queue_policy" "service_queue_policy" {
   ]
 }
 POLICY
-}
+}*/

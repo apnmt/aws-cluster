@@ -1,4 +1,4 @@
-output "api_gateway_invoke_url" {
+/*output "api_gateway_invoke_url" {
   description = "Url to invoke Api Gateway"
   value       = aws_api_gateway_deployment.deployment.invoke_url
 }
@@ -64,4 +64,4 @@ output "organization_appointmentservice_documentdb_password" {
   description = "OrganizationAppointmentservice DocumentDB instance password"
   value       = module.organization-appointmentservice-application.documentdb_password
   sensitive   = true
-}
+}*/

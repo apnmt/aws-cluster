@@ -1,4 +1,4 @@
-module "appointmentservice-application" {
+/*module "appointmentservice-application" {
   source = "./modules/elb-postgres-application"
 
   application_name = "appointmentservice"
@@ -81,3 +81,4 @@ resource "aws_api_gateway_integration" "appointment_post_integration" {
     "integration.request.path.proxy" = "method.request.path.proxy"
   }
 }
+*/
