@@ -81,3 +81,47 @@ resource "aws_api_gateway_integration" "organization_post_integration" {
     "integration.request.path.proxy" = "method.request.path.proxy"
   }
 }
+
+
+#################
+# Organization Activation Queue #
+#################
+resource "aws_sqs_queue" "organization-activation-queue" {
+  name                       = "service-queue"
+  visibility_timeout_seconds = 300
+
+  tags = {
+    Environment = var.environment
+  }
+}
+
+resource "aws_sns_topic_subscription" "organization-activation_sqs_target" {
+  topic_arn = aws_sns_topic.organization-activation-changed.arn
+  protocol  = "sqs"
+  endpoint  = aws_sqs_queue.organization-activation-queue.arn
+}
+
+resource "aws_sqs_queue_policy" "organization-activation_queue_policy" {
+  queue_url = aws_sqs_queue.organization-activation-queue.id
+
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Id": "sqspolicy",
+  "Statement": [
+    {
+      "Sid": "First",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "sqs:SendMessage",
+      "Resource": "${aws_sqs_queue.organization-activation-queue.arn}",
+      "Condition": {
+        "ArnEquals": {
+          "aws:SourceArn": "${aws_sns_topic.organization-activation-changed.arn}"
+        }
+      }
+    }
+  ]
+}
+POLICY
+}

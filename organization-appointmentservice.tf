@@ -167,3 +167,132 @@ resource "aws_sqs_queue_policy" "service_queue_policy" {
 }
 POLICY
 }
+
+#################
+# Closing Time Queue #
+#################
+resource "aws_sqs_queue" "closing-time-queue" {
+  name                       = "closing-time-queue"
+  visibility_timeout_seconds = 300
+
+  tags = {
+    Environment = var.environment
+  }
+}
+
+resource "aws_sns_topic_subscription" "closing_time_sqs_target" {
+  topic_arn = aws_sns_topic.closing-time-changed.arn
+  protocol  = "sqs"
+  endpoint  = aws_sqs_queue.closing-time-queue.arn
+}
+
+resource "aws_sqs_queue_policy" "closing_time_queue_policy" {
+  queue_url = aws_sqs_queue.closing-time-queue.id
+
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Id": "sqspolicy",
+  "Statement": [
+    {
+      "Sid": "First",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "sqs:SendMessage",
+      "Resource": "${aws_sqs_queue.closing-time-queue.arn}",
+      "Condition": {
+        "ArnEquals": {
+          "aws:SourceArn": "${aws_sns_topic.closing-time-changed.arn}"
+        }
+      }
+    }
+  ]
+}
+POLICY
+}
+
+#################
+# Opening Hour Queue #
+#################
+resource "aws_sqs_queue" "opening-hour-queue" {
+  name                       = "opening-hour-queue"
+  visibility_timeout_seconds = 300
+
+  tags = {
+    Environment = var.environment
+  }
+}
+
+resource "aws_sns_topic_subscription" "opening-hour_sqs_target" {
+  topic_arn = aws_sns_topic.opening-hour-changed.arn
+  protocol  = "sqs"
+  endpoint  = aws_sqs_queue.opening-hour-queue.arn
+}
+
+resource "aws_sqs_queue_policy" "opening-hour_queue_policy" {
+  queue_url = aws_sqs_queue.opening-hour-queue.id
+
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Id": "sqspolicy",
+  "Statement": [
+    {
+      "Sid": "First",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "sqs:SendMessage",
+      "Resource": "${aws_sqs_queue.opening-hour-queue.arn}",
+      "Condition": {
+        "ArnEquals": {
+          "aws:SourceArn": "${aws_sns_topic.opening-hour-changed.arn}"
+        }
+      }
+    }
+  ]
+}
+POLICY
+}
+
+#################
+# Working Hour Queue #
+#################
+resource "aws_sqs_queue" "working-hour-queue" {
+  name                       = "working-hour-queue"
+  visibility_timeout_seconds = 300
+
+  tags = {
+    Environment = var.environment
+  }
+}
+
+resource "aws_sns_topic_subscription" "working-hour_sqs_target" {
+  topic_arn = aws_sns_topic.working-hour-changed.arn
+  protocol  = "sqs"
+  endpoint  = aws_sqs_queue.working-hour-queue.arn
+}
+
+resource "aws_sqs_queue_policy" "working-hour_queue_policy" {
+  queue_url = aws_sqs_queue.working-hour-queue.id
+
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Id": "sqspolicy",
+  "Statement": [
+    {
+      "Sid": "First",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "sqs:SendMessage",
+      "Resource": "${aws_sqs_queue.working-hour-queue.arn}",
+      "Condition": {
+        "ArnEquals": {
+          "aws:SourceArn": "${aws_sns_topic.working-hour-changed.arn}"
+        }
+      }
+    }
+  ]
+}
+POLICY
+}
