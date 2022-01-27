@@ -20,17 +20,7 @@ variable "region" {
   type        = string
   description = "AWS region"
 }
-variable "aws_access_key" {
-  type        = string
-  description = "AWS AccessKey"
-  sensitive   = true
-}
-variable "aws_secret_key" {
-  type        = string
-  description = "AWS SecretKey"
-  sensitive   = true
-}
-variable "aws_cognito_user_pool_id" {
-  type        = string
-  description = "AWS Cognito User Pool Id"
+variable "environment_variables" {
+  type        = map(string)
+  description = "Lambda Environment Variables"
 }

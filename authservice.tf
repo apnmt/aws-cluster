@@ -1,16 +1,18 @@
 module "authservice-application" {
   source = "./modules/lambda-application"
 
-  application_name         = "authservice"
-  handler                  = "de.apnmt.authentication.LambdaHandler::handleRequest"
-  s3_bucket_id             = var.s3_bucket_id
-  public_subnets           = module.vpc.public_subnets
-  private_subnets          = module.vpc.private_subnets
-  vpc_id                   = module.vpc.vpc_id
-  region                   = var.region
-  aws_access_key           = var.aws_access_key
-  aws_secret_key           = var.aws_secret_key
-  aws_cognito_user_pool_id = aws_cognito_user_pool.apnmt_user_pool.id
+  application_name      = "authservice"
+  handler               = "de.apnmt.authentication.LambdaHandler::handleRequest"
+  s3_bucket_id          = var.s3_bucket_id
+  public_subnets        = module.vpc.public_subnets
+  private_subnets       = module.vpc.private_subnets
+  vpc_id                = module.vpc.vpc_id
+  region                = var.region
+  environment_variables = {
+    CLOUD_AWS_CREDENTIALS_ACCESSKEY = var.aws_access_key,
+    CLOUD_AWS_CREDENTIALS_SECRETKEY = var.aws_secret_key,
+    CLOUD_AWS_COGNITO_USERPOOLID    = aws_cognito_user_pool.apnmt_user_pool.id
+  }
 }
 
 resource "aws_lambda_permission" "api_gateway" {

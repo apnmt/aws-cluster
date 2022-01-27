@@ -8,6 +8,13 @@ resource "aws_lambda_function" "lambda" {
   handler = var.handler
 
   role = aws_iam_role.lambda_role.arn
+
+  memory_size = 512
+  timeout     = 30
+
+  environment {
+    variables = var.environment_variables
+  }
 }
 
 resource "aws_iam_role" "lambda_role" {
