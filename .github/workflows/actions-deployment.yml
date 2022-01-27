@@ -11,6 +11,12 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v1
 
+      - name: Set AWS Secrets
+        uses: datamonsters/replace-action@v2
+        with:
+          files: 'terraform.auto.tfvars'
+          replacements: '^CFG:aws_access_key^=${{ secrets.AWS_ACCESS_KEY }},^CFG:aws_secret_key^=${{ secrets.AWS_SECRET_KEY }}'
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
