@@ -1,17 +1,17 @@
 module "authservice-application" {
-  source = "./modules/lambda-application"
+  source = "./modules/lambda-application-js"
 
   application_name      = "authservice"
-  handler               = "de.apnmt.authentication.LambdaHandler::handleRequest"
+  handler               = "authservice.handler"
   s3_bucket_id          = var.s3_bucket_id
   public_subnets        = module.vpc.public_subnets
   private_subnets       = module.vpc.private_subnets
   vpc_id                = module.vpc.vpc_id
   region                = var.region
   environment_variables = {
-    CLOUD_AWS_CREDENTIALS_ACCESSKEY = var.aws_access_key,
-    CLOUD_AWS_CREDENTIALS_SECRETKEY = var.aws_secret_key,
-    CLOUD_AWS_COGNITO_USERPOOLID    = aws_cognito_user_pool.apnmt_user_pool.id
+    ACCESS_KEY           = var.aws_access_key,
+    SECRET_KEY           = var.aws_secret_key,
+    COGNITO_USER_POOL_ID = aws_cognito_user_pool.apnmt_user_pool.id
   }
 }
 
