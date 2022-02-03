@@ -76,6 +76,11 @@ resource "aws_elastic_beanstalk_environment" "environment" {
     value     = "enhanced"
   }
   setting {
+    namespace = "aws:elasticbeanstalk:xray"
+    name      = "XRayEnabled"
+    value     = true
+  }
+  setting {
     name      = "SERVER_PORT"
     namespace = "aws:elasticbeanstalk:application:environment"
     value     = "5000"

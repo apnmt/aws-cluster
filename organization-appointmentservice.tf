@@ -62,7 +62,7 @@ resource "aws_api_gateway_integration" "organizationappointment_get_integration"
   http_method             = aws_api_gateway_method.organizationappointment_get.http_method
   integration_http_method = "ANY"
   type                    = "HTTP_PROXY"
-  uri                     = "http://${module.appointmentservice-application.elb_endpoint_url}/api/{proxy}"
+  uri                     = "http://${module.organization-appointmentservice-application.elb_endpoint_url}/api/{proxy}"
 
   request_parameters = {
     "integration.request.path.proxy" = "method.request.path.proxy"
@@ -75,7 +75,7 @@ resource "aws_api_gateway_integration" "organizationappointment_post_integration
   http_method             = aws_api_gateway_method.organizationappointment_post.http_method
   integration_http_method = "ANY"
   type                    = "HTTP_PROXY"
-  uri                     = "http://${module.appointmentservice-application.elb_endpoint_url}/api/{proxy}"
+  uri                     = "http://${module.organization-appointmentservice-application.elb_endpoint_url}/api/{proxy}"
 
   request_parameters = {
     "integration.request.path.proxy" = "method.request.path.proxy"

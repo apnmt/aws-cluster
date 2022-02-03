@@ -76,6 +76,11 @@ resource "aws_elastic_beanstalk_environment" "environment" {
     value     = "enhanced"
   }
   setting {
+    namespace = "aws:elasticbeanstalk:xray"
+    name      = "XRayEnabled"
+    value     = true
+  }
+  setting {
     name      = "SERVER_PORT"
     namespace = "aws:elasticbeanstalk:application:environment"
     value     = "5000"
@@ -113,6 +118,6 @@ resource "aws_elastic_beanstalk_environment" "environment" {
   setting {
     name      = "SPRING_DATA_MONGODB_URI"
     namespace = "aws:elasticbeanstalk:application:environment"
-    value     = "mongodb://${aws_docdb_cluster.documentdb-cluster.master_username}:${aws_docdb_cluster.documentdb-cluster.master_password}@${aws_docdb_cluster.documentdb-cluster.endpoint}:${aws_docdb_cluster.documentdb-cluster.port}"
+    value     = "mongodb://${aws_docdb_cluster.documentdb-cluster.master_username}:${aws_docdb_cluster.documentdb-cluster.master_password}@${aws_docdb_cluster.documentdb-cluster.endpoint}:${aws_docdb_cluster.documentdb-cluster.port}/?retryWrites=false"
   }
 }

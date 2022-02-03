@@ -20,3 +20,8 @@ output "documentdb_password" {
   value       = aws_docdb_cluster.documentdb-cluster.master_password
   sensitive   = true
 }
+
+output "elb_endpoint_url" {
+  description = "ELB endpoint url"
+  value       = aws_elastic_beanstalk_environment.environment.endpoint_url
+}
