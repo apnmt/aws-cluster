@@ -23,7 +23,7 @@ resource "aws_security_group" "rds" {
 
 resource "aws_db_subnet_group" "rds" {
   name       = "${var.application_name}-rds-${var.environment}"
-  subnet_ids = var.public_subnets
+  subnet_ids = var.private_subnets
 
   tags = {
     Environment = var.environment

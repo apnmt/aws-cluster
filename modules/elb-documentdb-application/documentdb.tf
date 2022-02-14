@@ -23,7 +23,7 @@ resource "aws_security_group" "documentdb" {
 
 resource "aws_docdb_subnet_group" "documentdb" {
   name       = "${var.application_name}-documentdb-${var.environment}"
-  subnet_ids = var.public_subnets
+  subnet_ids = var.private_subnets
 
   tags = {
     Environment = var.environment
