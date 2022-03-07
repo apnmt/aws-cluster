@@ -33,9 +33,68 @@ resource "aws_api_gateway_stage" "stage" {
   xray_tracing_enabled = true
 }
 
-resource "aws_api_gateway_authorizer" "api_authorizer" {
-  name          = "CognitoUserPoolAuthorizer"
-  type          = "COGNITO_USER_POOLS"
-  rest_api_id   = aws_api_gateway_rest_api.api.id
-  provider_arns = [aws_cognito_user_pool.apnmt_user_pool.arn]
+resource "aws_api_gateway_authorizer" "authorizer" {
+  name                   = "authorizer"
+  rest_api_id            = aws_api_gateway_rest_api.api.id
+  authorizer_uri         = module.authorizer-application.invoke_arn
+  authorizer_credentials = aws_iam_role.invocation_role.arn
+}
+
+resource "aws_iam_role" "invocation_role" {
+  name = "api_gateway_auth_invocation"
+  path = "/"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "apigateway.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "invocation_policy" {
+  name = "default"
+  role = aws_iam_role.invocation_role.id
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "lambda:InvokeFunction",
+      "Effect": "Allow",
+      "Resource": "${module.authorizer-application.arn}"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role" "lambda" {
+  name = "demo-lambda"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
 }

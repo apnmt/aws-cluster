@@ -1,5 +1,5 @@
 module "authservice-application" {
-  source = "./modules/lambda-application-js"
+  source = "./modules/lambda-application"
 
   application_name      = "authservice"
   handler               = "authservice.handler"
@@ -8,6 +8,7 @@ module "authservice-application" {
   private_subnets       = module.vpc.private_subnets
   vpc_id                = module.vpc.vpc_id
   region                = var.region
+  runtime               = "nodejs14.x"
   environment_variables = {
     ACCESS_KEY           = var.aws_access_key,
     SECRET_KEY           = var.aws_secret_key,

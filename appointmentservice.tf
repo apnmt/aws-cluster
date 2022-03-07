@@ -49,8 +49,8 @@ resource "aws_api_gateway_method" "appointment_post" {
   rest_api_id        = aws_api_gateway_rest_api.api.id
   resource_id        = aws_api_gateway_resource.appointment_proxy.id
   http_method        = "POST"
-  authorization      = "COGNITO_USER_POOLS"
-  authorizer_id      = aws_api_gateway_authorizer.api_authorizer.id
+  authorization      = "CUSTOM"
+  authorizer_id      = aws_api_gateway_authorizer.authorizer.id
   request_parameters = {
     "method.request.path.proxy" = true
   }

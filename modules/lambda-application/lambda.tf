@@ -4,7 +4,7 @@ resource "aws_lambda_function" "lambda" {
   s3_bucket = var.s3_bucket_id
   s3_key    = "${var.application_name}.zip"
 
-  runtime = "nodejs14.x"
+  runtime = var.runtime
   handler = var.handler
 
   role = aws_iam_role.lambda_role.arn
@@ -18,7 +18,7 @@ resource "aws_lambda_function" "lambda" {
 }
 
 resource "aws_iam_role" "lambda_role" {
-  name = "serverless_lambda"
+  name = "serverless_lambda_${var.application_name}"
 
   assume_role_policy = jsonencode({
     Version   = "2012-10-17"

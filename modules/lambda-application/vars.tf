@@ -20,6 +20,9 @@ variable "region" {
   type        = string
   description = "AWS region"
 }
+variable "runtime" {
+  type = string
+}
 variable "environment_variables" {
   type        = map(string)
   description = "Lambda Environment Variables"

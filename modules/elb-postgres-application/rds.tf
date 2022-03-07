@@ -43,7 +43,7 @@ resource "aws_db_instance" "rds-instance" {
   instance_class         = var.db_instance_type
   allocated_storage      = 5
   engine                 = "postgres"
-  engine_version         = "12.5"
+  engine_version         = "12.9"
   skip_final_snapshot    = true
   publicly_accessible    = true
   username               = var.application_name
