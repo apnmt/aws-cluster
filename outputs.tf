@@ -1,6 +1,6 @@
 output "api_gateway_invoke_url" {
   description = "Url to invoke Api Gateway"
-  value       = aws_api_gateway_deployment.deployment.invoke_url
+  value       = "${aws_api_gateway_deployment.deployment.invoke_url}/${aws_api_gateway_stage.stage.stage_name}/"
 }
 
 output "cognito_user_pool_id" {
