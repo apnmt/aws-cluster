@@ -97,6 +97,100 @@ resource "aws_dynamodb_table_item" "admin" {
 ITEM
 }
 
+resource "aws_dynamodb_table_item" "manager" {
+  table_name = aws_dynamodb_table.auth-policy-store.name
+  hash_key   = aws_dynamodb_table.auth-policy-store.hash_key
+
+  item = <<ITEM
+{
+ "group": {
+  "S": "manager"
+ },
+ "policy": {
+  "M": {
+   "Version": {
+    "S": "2012-10-17"
+   },
+   "Statement": {
+    "L": [
+     {
+      "M": {
+       "Resource": {
+        "L": [
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/POST/service/appointment/api/appointments"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/PUT/service/appointment/api/appointments/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/DELETE/service/appointment/api/appointments/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/GET/service/appointment/api/appointments/{id}"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/GET/service/appointment/api/appointments/organization/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/ANY/service/appointment/api/customers/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/GET/service/appointment/api/customers/organization/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/ANY/service/appointment/api/services/**"
+         }
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/ANY/service/organization/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/GET/service/organizationappointment/api/slots"
+         }
+        ]
+       },
+       "Action": {
+        "S": "execute-api:Invoke"
+       },
+       "Effect": {
+        "S": "Allow"
+       },
+       "Sid": {
+        "S": "APNMT-API"
+       }
+      }
+     },
+     {
+      "M": {
+       "Resource": {
+        "L": [
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/*/*"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/GET/service/appointment/api/customers"
+         }
+        ]
+       },
+       "Action": {
+        "S": "execute-api:Invoke"
+       },
+       "Effect": {
+        "S": "DENY"
+       },
+       "Sid": {
+        "S": "APNMT-API"
+       }
+      }
+     }
+    ]
+   }
+  }
+ }
+}
+ITEM
+}
+
 resource "aws_dynamodb_table_item" "user" {
   table_name = aws_dynamodb_table.auth-policy-store.name
   hash_key   = aws_dynamodb_table.auth-policy-store.hash_key
@@ -118,13 +212,40 @@ resource "aws_dynamodb_table_item" "user" {
        "Resource": {
         "L": [
          {
-          "S": "arn:aws:execute-api:*:*:*/*/GET/*"
+          "S": "arn:aws:execute-api:*:*:*/*/POST/service/appointment/api/appointments"
          },
          {
-          "S": "arn:aws:execute-api:*:*:*/*/POST/service/appointment/*"
+          "S": "arn:aws:execute-api:*:*:*/*/PUT/service/appointment/api/appointments/**"
          },
          {
-          "S": "arn:aws:execute-api:*:*:*/*/POST/service/organization/*"
+          "S": "arn:aws:execute-api:*:*:*/*/DELETE/service/appointment/api/appointments/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/GET/service/appointment/api/appointments/{id}"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/GET/service/appointment/api/appointments/organization/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/ANY/service/appointment/api/customers/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/GET/service/appointment/api/customers/organization/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/GET/service/appointment/api/services/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/GET/service/organization/api/opening-hours/organization/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/GET/service/organization/api/working-hours/organization/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/GET/service/organization/api/closing-times/organization/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/GET/service/organizationappointment/api/slots"
          }
         ]
        },
@@ -133,6 +254,129 @@ resource "aws_dynamodb_table_item" "user" {
        },
        "Effect": {
         "S": "Allow"
+       },
+       "Sid": {
+        "S": "APNMT-API"
+       }
+      }
+     },
+     {
+      "M": {
+       "Resource": {
+        "L": [
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/*/*"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/GET/service/appointment/api/customers"
+         }
+        ]
+       },
+       "Action": {
+        "S": "execute-api:Invoke"
+       },
+       "Effect": {
+        "S": "DENY"
+       },
+       "Sid": {
+        "S": "APNMT-API"
+       }
+      }
+     }
+    ]
+   }
+  }
+ }
+}
+ITEM
+}
+
+resource "aws_dynamodb_table_item" "any" {
+  table_name = aws_dynamodb_table.auth-policy-store.name
+  hash_key   = aws_dynamodb_table.auth-policy-store.hash_key
+
+  item = <<ITEM
+{
+ "group": {
+  "S": "any"
+ },
+ "policy": {
+  "M": {
+   "Version": {
+    "S": "2012-10-17"
+   },
+   "Statement": {
+    "L": [
+     {
+      "M": {
+       "Resource": {
+        "L": [
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/POST/service/appointment/api/appointments"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/PUT/service/appointment/api/appointments/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/DELETE/service/appointment/api/appointments/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/GET/service/appointment/api/appointments/{id}"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/ANY/service/appointment/api/customers/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/GET/service/appointment/api/services/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/GET/service/organization/api/opening-hours/organization/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/GET/service/organization/api/working-hours/organization/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/GET/service/organization/api/closing-times/organization/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/GET/service/organizationappointment/api/slots"
+         }
+        ]
+       },
+       "Action": {
+        "S": "execute-api:Invoke"
+       },
+       "Effect": {
+        "S": "Allow"
+       },
+       "Sid": {
+        "S": "APNMT-API"
+       }
+      }
+     },
+     {
+      "M": {
+       "Resource": {
+        "L": [
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/*/*"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/GET/service/appointment/api/customers"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/ANY/service/appointment/api/appointments/organization/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/ANY/service/appointment/api/customers/organization/**"
+         }
+        ]
+       },
+       "Action": {
+        "S": "execute-api:Invoke"
+       },
+       "Effect": {
+        "S": "DENY"
        },
        "Sid": {
         "S": "APNMT-API"
