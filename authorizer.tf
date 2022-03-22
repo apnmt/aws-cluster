@@ -146,6 +146,9 @@ resource "aws_dynamodb_table_item" "manager" {
          },
          {
           "S": "arn:aws:execute-api:*:*:*/*/GET/service/organizationappointment/api/slots"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/ANY/service/payment/**"
          }
         ]
        },
@@ -169,6 +172,21 @@ resource "aws_dynamodb_table_item" "manager" {
          },
          {
           "S": "arn:aws:execute-api:*:*:*/*/GET/service/appointment/api/customers"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/POST/service/payment/api/products/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/PUT/service/payment/api/products/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/POST/service/payment/api/prices/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/PUT/service/payment/api/prices/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/GET/service/payment/api/customers/**"
          }
         ]
        },
@@ -246,6 +264,9 @@ resource "aws_dynamodb_table_item" "user" {
          },
          {
           "S": "arn:aws:execute-api:*:*:*/*/GET/service/organizationappointment/api/slots"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/ANY/service/payment/**"
          }
         ]
        },
@@ -269,6 +290,21 @@ resource "aws_dynamodb_table_item" "user" {
          },
          {
           "S": "arn:aws:execute-api:*:*:*/*/GET/service/appointment/api/customers"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/POST/service/payment/api/products/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/PUT/service/payment/api/products/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/POST/service/payment/api/prices/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/PUT/service/payment/api/prices/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/GET/service/payment/api/customers/**"
          }
         ]
        },
@@ -340,6 +376,9 @@ resource "aws_dynamodb_table_item" "any" {
          },
          {
           "S": "arn:aws:execute-api:*:*:*/*/GET/service/organizationappointment/api/slots"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/ANY/service/payment/api/stripe/events/**"
          }
         ]
        },
