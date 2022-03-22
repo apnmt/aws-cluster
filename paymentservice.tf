@@ -35,44 +35,21 @@ resource "aws_api_gateway_resource" "payment_proxy" {
   path_part   = "{proxy+}"
 }
 
-resource "aws_api_gateway_method" "payment_get" {
+resource "aws_api_gateway_method" "payment_any" {
   rest_api_id        = aws_api_gateway_rest_api.api.id
   resource_id        = aws_api_gateway_resource.payment_proxy.id
-  http_method        = "GET"
-  authorization      = "NONE"
+  http_method        = "ANY"
+  authorization      = "CUSTOM"
+  authorizer_id      = aws_api_gateway_authorizer.authorizer.id
   request_parameters = {
     "method.request.path.proxy" = true
   }
 }
 
-resource "aws_api_gateway_method" "payment_post" {
-  rest_api_id        = aws_api_gateway_rest_api.api.id
-  resource_id        = aws_api_gateway_resource.payment_proxy.id
-  http_method        = "POST"
-  authorization      = "COGNITO_USER_POOLS"
-  authorizer_id      = aws_api_gateway_authorizer.api_authorizer.id
-  request_parameters = {
-    "method.request.path.proxy" = true
-  }
-}
-
-resource "aws_api_gateway_integration" "payment_get_integration" {
+resource "aws_api_gateway_integration" "payment_any_integration" {
   rest_api_id             = aws_api_gateway_rest_api.api.id
   resource_id             = aws_api_gateway_resource.payment_proxy.id
-  http_method             = aws_api_gateway_method.payment_get.http_method
-  integration_http_method = "ANY"
-  type                    = "HTTP_PROXY"
-  uri                     = "http://${module.paymentservice-application.elb_endpoint_url}/api/{proxy}"
-
-  request_parameters = {
-    "integration.request.path.proxy" = "method.request.path.proxy"
-  }
-}
-
-resource "aws_api_gateway_integration" "payment_post_integration" {
-  rest_api_id             = aws_api_gateway_rest_api.api.id
-  resource_id             = aws_api_gateway_resource.payment_proxy.id
-  http_method             = aws_api_gateway_method.payment_post.http_method
+  http_method             = aws_api_gateway_method.payment_any.http_method
   integration_http_method = "ANY"
   type                    = "HTTP_PROXY"
   uri                     = "http://${module.paymentservice-application.elb_endpoint_url}/api/{proxy}"

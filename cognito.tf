@@ -40,7 +40,15 @@ EOF
 resource "aws_cognito_user_group" "user" {
   name         = "user"
   user_pool_id = aws_cognito_user_pool.apnmt_user_pool.id
-  description  = "Managed by Terraform"
+  description  = "User Group"
+  precedence   = 42
+  role_arn     = aws_iam_role.group_role.arn
+}
+
+resource "aws_cognito_user_group" "manager" {
+  name         = "manager"
+  user_pool_id = aws_cognito_user_pool.apnmt_user_pool.id
+  description  = "Manager Group"
   precedence   = 42
   role_arn     = aws_iam_role.group_role.arn
 }
@@ -48,7 +56,7 @@ resource "aws_cognito_user_group" "user" {
 resource "aws_cognito_user_group" "admin" {
   name         = "admin"
   user_pool_id = aws_cognito_user_pool.apnmt_user_pool.id
-  description  = "Managed by Terraform"
+  description  = "Admin Group"
   precedence   = 42
   role_arn     = aws_iam_role.group_role.arn
 }
