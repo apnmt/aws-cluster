@@ -32,6 +32,14 @@ variable "max_size" {
   type    = number
   default = 2
 }
+variable "cpu_lower_threshold" {
+  type    = number
+  default = 10
+}
+variable "cpu_upper_threshold" {
+  type    = number
+  default = 50
+}
 variable "vpc_id" {
   type = string
 }
