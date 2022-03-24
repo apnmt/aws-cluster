@@ -6,55 +6,17 @@ module "appointmentservice-application" {
   environment      = var.environment
   db_instance_type = "db.t2.micro"
   instance_type    = "t2.micro"
-  public_subnets   = module.vpc.public_subnets
   private_subnets  = module.vpc.private_subnets
   vpc_id           = module.vpc.vpc_id
   region           = var.region
   aws_access_key   = var.aws_access_key
   aws_secret_key   = var.aws_secret_key
-}
+  security_group   = aws_security_group.elasticbeanstalk_vpc_endpoint.id
 
-###############
-# API_Gateway #
-###############
-resource "aws_api_gateway_resource" "appointment" {
-  rest_api_id = aws_api_gateway_rest_api.api.id
-  parent_id   = aws_api_gateway_resource.service.id
-  path_part   = "appointment"
-}
-
-resource "aws_api_gateway_resource" "appointment_api_resource" {
-  rest_api_id = aws_api_gateway_rest_api.api.id
-  parent_id   = aws_api_gateway_resource.appointment.id
-  path_part   = "api"
-}
-
-resource "aws_api_gateway_resource" "appointment_proxy" {
-  rest_api_id = aws_api_gateway_rest_api.api.id
-  parent_id   = aws_api_gateway_resource.appointment_api_resource.id
-  path_part   = "{proxy+}"
-}
-
-resource "aws_api_gateway_method" "appointment_any" {
-  rest_api_id        = aws_api_gateway_rest_api.api.id
-  resource_id        = aws_api_gateway_resource.appointment_proxy.id
-  http_method        = "ANY"
-  authorization      = "CUSTOM"
-  authorizer_id      = aws_api_gateway_authorizer.authorizer.id
-  request_parameters = {
-    "method.request.path.proxy" = true
-  }
-}
-
-resource "aws_api_gateway_integration" "appointment_any_integration" {
-  rest_api_id             = aws_api_gateway_rest_api.api.id
-  resource_id             = aws_api_gateway_resource.appointment_proxy.id
-  http_method             = aws_api_gateway_method.appointment_any.http_method
-  integration_http_method = "ANY"
-  type                    = "HTTP_PROXY"
-  uri                     = "http://${module.appointmentservice-application.elb_endpoint_url}/api/{proxy}"
-
-  request_parameters = {
-    "integration.request.path.proxy" = "method.request.path.proxy"
-  }
+  depends_on_endpoints = [
+    aws_vpc_endpoint.ec2,
+    aws_vpc_endpoint.elasticbeanstalk,
+    aws_vpc_endpoint.s3,
+    aws_vpc_endpoint.elasticbeanstalk-hc
+  ]
 }

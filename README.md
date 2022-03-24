@@ -31,11 +31,11 @@ aws cognito-idp admin-set-user-password \
 ```
 curl --location --request POST 'https://cognito-idp.eu-central-1.amazonaws.com' --header 'X-Amz-Target: AWSCognitoIdentityProviderService.InitiateAuth' --header 'Content-Type: application/x-amz-json-1.1' --data-raw '{
 "AuthParameters" : {
-"USERNAME" : "${username}",
-"PASSWORD" : "${password}"
+"USERNAME" : "tobi5115",
+"PASSWORD" : "Test#123"
 },
 "AuthFlow" : "USER_PASSWORD_AUTH",
-"ClientId" : "${clientId}"
+"ClientId" : "5jo2loo81f748m1kd4rvjl41ei"
 }'
 ```
 

@@ -45,7 +45,7 @@ resource "aws_db_instance" "rds-instance" {
   engine                 = "postgres"
   engine_version         = "12.9"
   skip_final_snapshot    = true
-  publicly_accessible    = true
+  publicly_accessible    = false
   username               = var.application_name
   password               = random_string.rds-db-password.result
   db_subnet_group_name   = aws_db_subnet_group.rds.name

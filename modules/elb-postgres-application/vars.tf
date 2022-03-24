@@ -43,9 +43,6 @@ variable "cpu_upper_threshold" {
 variable "vpc_id" {
   type = string
 }
-variable "public_subnets" {
-  type = list(string)
-}
 variable "private_subnets" {
   type = list(string)
 }
@@ -62,4 +59,11 @@ variable "aws_secret_key" {
   type        = string
   description = "AWS SecretKey"
   sensitive   = true
+}
+variable "depends_on_endpoints" {
+  type    = list(any)
+  default = []
+}
+variable "security_group" {
+  type = string
 }

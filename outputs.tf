@@ -1,7 +1,7 @@
-output "api_gateway_invoke_url" {
+/*output "api_gateway_invoke_url" {
   description = "Url to invoke Api Gateway"
-  value       = "${aws_api_gateway_deployment.deployment.invoke_url}/${aws_api_gateway_stage.stage.stage_name}/"
-}
+  value       = "${aws_api_gateway_deployment.deployment.invoke_url}${aws_api_gateway_stage.stage.stage_name}/"
+}*/
 
 output "cognito_user_pool_id" {
   description = "User Pool Id"
@@ -42,7 +42,7 @@ output "appointmentservice_rds_password" {
   sensitive   = true
 }
 
-output "organization_appointmentservice_documentdb_hostname" {
+/*output "organization_appointmentservice_documentdb_hostname" {
   description = "OrganizationAppointmentservice DocumentDB instance hostname"
   value       = module.organization-appointmentservice-application.documentdb_hostname
   sensitive   = true
@@ -64,4 +64,4 @@ output "organization_appointmentservice_documentdb_password" {
   description = "OrganizationAppointmentservice DocumentDB instance password"
   value       = module.organization-appointmentservice-application.documentdb_password
   sensitive   = true
-}
+}*/

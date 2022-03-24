@@ -38,7 +38,7 @@ resource "aws_elastic_beanstalk_environment" "environment" {
   setting {
     namespace = "aws:ec2:vpc"
     name      = "Subnets"
-    value     = join(",", var.public_subnets)
+    value     = join(",", var.private_subnets)
   }
   setting {
     namespace = "aws:elasticbeanstalk:environment:process:default"
@@ -58,7 +58,7 @@ resource "aws_elastic_beanstalk_environment" "environment" {
   setting {
     namespace = "aws:ec2:vpc"
     name      = "ELBScheme"
-    value     = "internet facing"
+    value     = "internal"
   }
   setting {
     namespace = "aws:autoscaling:asg"
@@ -99,6 +99,16 @@ resource "aws_elastic_beanstalk_environment" "environment" {
     namespace = "aws:autoscaling:trigger"
     name      = "EvaluationPeriods"
     value     = 3
+  }
+  setting {
+    namespace = "aws:autoscaling:launchconfiguration"
+    name      = "SecurityGroups"
+    value     = var.security_group
+  }
+  setting {
+    namespace = "aws:elbv2:loadbalancer"
+    name      = "SecurityGroups"
+    value     = var.security_group
   }
   setting {
     namespace = "aws:elasticbeanstalk:healthreporting:system"
@@ -155,4 +165,6 @@ resource "aws_elastic_beanstalk_environment" "environment" {
     namespace = "aws:elasticbeanstalk:application:environment"
     value     = "jdbc:postgresql://${aws_db_instance.rds-instance.address}:${aws_db_instance.rds-instance.port}/${aws_db_instance.rds-instance.name}"
   }
+
+  depends_on = [var.depends_on_endpoints]
 }
