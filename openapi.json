@@ -1,0 +1,282 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "api-gateway",
+    "description": "Proxy to handle requests to our Services",
+    "version": "2022-03-24T12:52:31Z"
+  },
+  "servers": [
+    {
+      "url": "https://mlik9ibo58.execute-api.eu-central-1.amazonaws.com/{basePath}",
+      "variables": {
+        "basePath": {
+          "default": "/test"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/service/authentication/registration": {
+      "post": {
+        "parameters": [
+          {
+            "name": "proxy",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:245886143564:function:authservice/invocations",
+          "requestParameters": {
+            "integration.request.path.proxy": "method.request.path.proxy"
+          },
+          "passthroughBehavior": "when_no_match",
+          "timeoutInMillis": 29000,
+          "type": "aws_proxy"
+        }
+      }
+    },
+    "/service/appointment/api/{proxy+}": {
+      "x-amazon-apigateway-any-method": {
+        "parameters": [
+          {
+            "name": "proxy",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "authorizer": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "httpMethod": "ANY",
+          "uri": "http://awseb-AWSEB-12KRI75Q64VS5-480492442.eu-central-1.elb.amazonaws.com/api/{proxy}",
+          "requestParameters": {
+            "integration.request.path.proxy": "method.request.path.proxy"
+          },
+          "passthroughBehavior": "when_no_match",
+          "timeoutInMillis": 29000,
+          "type": "http_proxy"
+        }
+      }
+    },
+    "/service/appointment/api/appointments": {
+      "post": {
+        "parameters": [
+          {
+            "name": "proxy",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "httpMethod": "POST",
+          "uri": "http://awseb-AWSEB-12KRI75Q64VS5-480492442.eu-central-1.elb.amazonaws.com/api/appointments",
+          "requestParameters": {
+            "integration.request.path.proxy": "method.request.path.proxy"
+          },
+          "passthroughBehavior": "when_no_match",
+          "timeoutInMillis": 29000,
+          "type": "http_proxy"
+        }
+      }
+    },
+    "/service/appointment/api/appointments/{proxy+}": {
+      "get": {
+        "parameters": [
+          {
+            "name": "proxy",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "httpMethod": "GET",
+          "uri": "http://awseb-AWSEB-12KRI75Q64VS5-480492442.eu-central-1.elb.amazonaws.com/api/appointments/{proxy}",
+          "requestParameters": {
+            "integration.request.path.proxy": "method.request.path.proxy"
+          },
+          "passthroughBehavior": "when_no_match",
+          "timeoutInMillis": 29000,
+          "type": "http_proxy"
+        }
+      },
+      "put": {
+        "parameters": [
+          {
+            "name": "proxy",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "httpMethod": "PUT",
+          "uri": "http://awseb-AWSEB-12KRI75Q64VS5-480492442.eu-central-1.elb.amazonaws.com/api/appointments/{proxy}",
+          "requestParameters": {
+            "integration.request.path.proxy": "method.request.path.proxy"
+          },
+          "passthroughBehavior": "when_no_match",
+          "timeoutInMillis": 29000,
+          "type": "http_proxy"
+        }
+      },
+      "delete": {
+        "parameters": [
+          {
+            "name": "proxy",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "httpMethod": "DELETE",
+          "uri": "http://awseb-AWSEB-12KRI75Q64VS5-480492442.eu-central-1.elb.amazonaws.com/api/appointments/{proxy}",
+          "requestParameters": {
+            "integration.request.path.proxy": "method.request.path.proxy"
+          },
+          "passthroughBehavior": "when_no_match",
+          "timeoutInMillis": 29000,
+          "type": "http_proxy"
+        }
+      }
+    },
+    "/service/appointment/api/customers": {
+      "post": {
+        "parameters": [
+          {
+            "name": "proxy",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "httpMethod": "POST",
+          "uri": "http://awseb-AWSEB-12KRI75Q64VS5-480492442.eu-central-1.elb.amazonaws.com/api/customers",
+          "requestParameters": {
+            "integration.request.path.proxy": "method.request.path.proxy"
+          },
+          "passthroughBehavior": "when_no_match",
+          "timeoutInMillis": 29000,
+          "type": "http_proxy"
+        }
+      }
+    },
+    "/service/appointment/api/customers/organization/{proxy+}": {
+      "get": {
+        "parameters": [
+          {
+            "name": "proxy",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "authorizer": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "httpMethod": "GET",
+          "uri": "http://awseb-AWSEB-12KRI75Q64VS5-480492442.eu-central-1.elb.amazonaws.com/api/customers/organization/{proxy}",
+          "requestParameters": {
+            "integration.request.path.proxy": "method.request.path.proxy"
+          },
+          "passthroughBehavior": "when_no_match",
+          "timeoutInMillis": 29000,
+          "type": "http_proxy"
+        }
+      }
+    },
+    "/service/appointment/api/services/{proxy+}": {
+      "get": {
+        "parameters": [
+          {
+            "name": "proxy",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "httpMethod": "GET",
+          "uri": "http://awseb-AWSEB-12KRI75Q64VS5-480492442.eu-central-1.elb.amazonaws.com/api/services/{proxy}",
+          "requestParameters": {
+            "integration.request.path.proxy": "method.request.path.proxy"
+          },
+          "passthroughBehavior": "when_no_match",
+          "timeoutInMillis": 29000,
+          "type": "http_proxy"
+        }
+      }
+    },
+    "/service/appointment/api/customers/{proxy+}": {
+      "x-amazon-apigateway-any-method": {
+        "parameters": [
+          {
+            "name": "proxy",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "httpMethod": "ANY",
+          "uri": "http://awseb-AWSEB-12KRI75Q64VS5-480492442.eu-central-1.elb.amazonaws.com/api/customers/{proxy}",
+          "requestParameters": {
+            "integration.request.path.proxy": "method.request.path.proxy"
+          },
+          "passthroughBehavior": "when_no_match",
+          "timeoutInMillis": 29000,
+          "type": "http_proxy"
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "authorizer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "x-amazon-apigateway-authtype": "custom",
+        "x-amazon-apigateway-authorizer": {
+          "authorizerUri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:245886143564:function:authorizer/invocations",
+          "authorizerCredentials": "arn:aws:iam::245886143564:role/api_gateway_auth_invocation",
+          "authorizerResultTtlInSeconds": 300,
+          "type": "token"
+        }
+      }
+    }
+  }
+}
