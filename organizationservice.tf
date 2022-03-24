@@ -59,6 +59,128 @@ resource "aws_api_gateway_integration" "organization_any_integration" {
   }
 }
 
+resource "aws_api_gateway_resource" "organization_opening_hours" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  parent_id   = aws_api_gateway_resource.organization_api_resource.id
+  path_part   = "opening-hours"
+}
+
+resource "aws_api_gateway_resource" "organization_opening_hours_organization" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  parent_id   = aws_api_gateway_resource.organization_opening_hours.id
+  path_part   = "organization"
+}
+
+resource "aws_api_gateway_resource" "organization_opening_hours_proxy" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  parent_id   = aws_api_gateway_resource.organization_opening_hours_organization.id
+  path_part   = "{proxy+}"
+}
+
+resource "aws_api_gateway_method" "organization_opening_hours" {
+  rest_api_id        = aws_api_gateway_rest_api.api.id
+  resource_id        = aws_api_gateway_resource.organization_opening_hours_proxy.id
+  http_method        = "GET"
+  authorization      = "NONE"
+  request_parameters = {
+    "method.request.path.proxy" = true
+  }
+}
+
+resource "aws_api_gateway_integration" "organization_opening_hours_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.api.id
+  resource_id             = aws_api_gateway_resource.organization_opening_hours_proxy.id
+  http_method             = aws_api_gateway_method.organization_opening_hours.http_method
+  integration_http_method = "GET"
+  type                    = "HTTP_PROXY"
+  uri                     = "http://${module.organizationservice-application.elb_endpoint_url}/api/opening-hours/organization/{proxy}"
+
+  request_parameters = {
+    "integration.request.path.proxy" = "method.request.path.proxy"
+  }
+}
+
+resource "aws_api_gateway_resource" "organization_working_hours" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  parent_id   = aws_api_gateway_resource.organization_api_resource.id
+  path_part   = "working-hours"
+}
+
+resource "aws_api_gateway_resource" "organization_working_hours_organization" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  parent_id   = aws_api_gateway_resource.organization_working_hours.id
+  path_part   = "organization"
+}
+
+resource "aws_api_gateway_resource" "organization_working_hours_proxy" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  parent_id   = aws_api_gateway_resource.organization_opening_hours_organization.id
+  path_part   = "{proxy+}"
+}
+
+resource "aws_api_gateway_method" "organization_working_hours" {
+  rest_api_id        = aws_api_gateway_rest_api.api.id
+  resource_id        = aws_api_gateway_resource.organization_working_hours_proxy.id
+  http_method        = "GET"
+  authorization      = "NONE"
+  request_parameters = {
+    "method.request.path.proxy" = true
+  }
+}
+
+resource "aws_api_gateway_integration" "organization_working_hours_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.api.id
+  resource_id             = aws_api_gateway_resource.organization_working_hours_proxy.id
+  http_method             = aws_api_gateway_method.organization_working_hours.http_method
+  integration_http_method = "GET"
+  type                    = "HTTP_PROXY"
+  uri                     = "http://${module.organizationservice-application.elb_endpoint_url}/api/working-hours/organization/{proxy}"
+
+  request_parameters = {
+    "integration.request.path.proxy" = "method.request.path.proxy"
+  }
+}
+
+resource "aws_api_gateway_resource" "organization_closing_times" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  parent_id   = aws_api_gateway_resource.organization_api_resource.id
+  path_part   = "closing-times"
+}
+
+resource "aws_api_gateway_resource" "organization_closing_times_organization" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  parent_id   = aws_api_gateway_resource.organization_closing_times.id
+  path_part   = "organization"
+}
+
+resource "aws_api_gateway_resource" "organization_closing_times_proxy" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  parent_id   = aws_api_gateway_resource.organization_closing_times_organization.id
+  path_part   = "{proxy+}"
+}
+
+resource "aws_api_gateway_method" "organization_closing_times" {
+  rest_api_id        = aws_api_gateway_rest_api.api.id
+  resource_id        = aws_api_gateway_resource.organization_closing_times_proxy.id
+  http_method        = "GET"
+  authorization      = "NONE"
+  request_parameters = {
+    "method.request.path.proxy" = true
+  }
+}
+
+resource "aws_api_gateway_integration" "organization_closing_times_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.api.id
+  resource_id             = aws_api_gateway_resource.organization_closing_times_proxy.id
+  http_method             = aws_api_gateway_method.organization_closing_times.http_method
+  integration_http_method = "GET"
+  type                    = "HTTP_PROXY"
+  uri                     = "http://${module.organizationservice-application.elb_endpoint_url}/api/closing-times/organization/{proxy}"
+
+  request_parameters = {
+    "integration.request.path.proxy" = "method.request.path.proxy"
+  }
+}
 
 #################
 # Organization Activation Queue #

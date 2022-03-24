@@ -23,7 +23,7 @@ resource "aws_api_gateway_resource" "organizationappointment" {
   path_part   = "organizationappointment"
 }
 
-resource "aws_api_gateway_resource" "organizationappointment_api_resource" {
+resource "aws_api_gateway_resource" "organizationappointment_api" {
   rest_api_id = aws_api_gateway_rest_api.api.id
   parent_id   = aws_api_gateway_resource.organizationappointment.id
   path_part   = "api"
@@ -31,7 +31,7 @@ resource "aws_api_gateway_resource" "organizationappointment_api_resource" {
 
 resource "aws_api_gateway_resource" "organizationappointment_proxy" {
   rest_api_id = aws_api_gateway_rest_api.api.id
-  parent_id   = aws_api_gateway_resource.organizationappointment_api_resource.id
+  parent_id   = aws_api_gateway_resource.organizationappointment_api.id
   path_part   = "{proxy+}"
 }
 
@@ -53,6 +53,35 @@ resource "aws_api_gateway_integration" "organizationappointment_any_integration"
   integration_http_method = "ANY"
   type                    = "HTTP_PROXY"
   uri                     = "http://${module.organization-appointmentservice-application.elb_endpoint_url}/api/{proxy}"
+
+  request_parameters = {
+    "integration.request.path.proxy" = "method.request.path.proxy"
+  }
+}
+
+resource "aws_api_gateway_resource" "organizationappointment_slots" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  parent_id   = aws_api_gateway_resource.organizationappointment_api.id
+  path_part   = "slots"
+}
+
+resource "aws_api_gateway_method" "organizationappointment_slots" {
+  rest_api_id        = aws_api_gateway_rest_api.api.id
+  resource_id        = aws_api_gateway_resource.organizationappointment_proxy.id
+  http_method        = "GET"
+  authorization      = "NONE"
+  request_parameters = {
+    "method.request.path.proxy" = true
+  }
+}
+
+resource "aws_api_gateway_integration" "organizationappointment_slots_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.api.id
+  resource_id             = aws_api_gateway_resource.organizationappointment_proxy.id
+  http_method             = aws_api_gateway_method.organizationappointment_slots.http_method
+  integration_http_method = "GET"
+  type                    = "HTTP_PROXY"
+  uri                     = "http://${module.organization-appointmentservice-application.elb_endpoint_url}/api/slots"
 
   request_parameters = {
     "integration.request.path.proxy" = "method.request.path.proxy"

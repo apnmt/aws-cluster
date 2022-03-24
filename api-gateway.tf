@@ -14,9 +14,20 @@ resource "aws_api_gateway_deployment" "deployment" {
   triggers    = {
     redeployment = sha1(jsonencode([
       aws_api_gateway_integration.appointment_any_integration.id,
+      aws_api_gateway_integration.appointment_appointments_get_integration,
+      aws_api_gateway_integration.appointment_appointments_post_integration,
+      aws_api_gateway_integration.appointment_appointments_put_integration,
+      aws_api_gateway_integration.appointment_appointments_delete_integration,
+      aws_api_gateway_integration.appointment_customers_any_integration,
+      aws_api_gateway_integration.appointment_services_get_integration,
       aws_api_gateway_integration.organization_any_integration.id,
+      aws_api_gateway_integration.organization_closing_times_integration.id,
+      aws_api_gateway_integration.organization_opening_hours_integration.id,
+      aws_api_gateway_integration.organization_working_hours_integration.id,
       aws_api_gateway_integration.organizationappointment_any_integration.id,
+      aws_api_gateway_integration.organizationappointment_slots_integration.id,
       aws_api_gateway_integration.payment_any_integration.id,
+      aws_api_gateway_integration.payment_stripe_post_integration.id
     ]))
   }
 
@@ -33,10 +44,12 @@ resource "aws_api_gateway_stage" "stage" {
 }
 
 resource "aws_api_gateway_authorizer" "authorizer" {
-  name                   = "authorizer"
-  rest_api_id            = aws_api_gateway_rest_api.api.id
-  authorizer_uri         = module.authorizer-application.invoke_arn
-  authorizer_credentials = aws_iam_role.invocation_role.arn
+  name                             = "authorizer"
+  rest_api_id                      = aws_api_gateway_rest_api.api.id
+  authorizer_uri                   = module.authorizer-application.invoke_arn
+  authorizer_credentials           = aws_iam_role.invocation_role.arn
+  # Caching for 5 Minutes
+  authorizer_result_ttl_in_seconds = 300
 }
 
 resource "aws_iam_role" "invocation_role" {
