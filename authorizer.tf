@@ -26,7 +26,8 @@ resource "aws_dynamodb_table" "auth-policy-store" {
     type = "S"
   }
   tags           = {
-    environment = var.environment
+    environment   = var.environment
+    ResourceGroup = "apnmt-aws"
   }
 }
 

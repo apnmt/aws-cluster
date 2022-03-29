@@ -26,7 +26,8 @@ resource "aws_db_subnet_group" "rds" {
   subnet_ids = var.private_subnets
 
   tags = {
-    Environment = var.environment
+    Environment   = var.environment
+    ResourceGroup = "apnmt-aws"
   }
 }
 
@@ -50,4 +51,7 @@ resource "aws_db_instance" "rds-instance" {
   password               = random_string.rds-db-password.result
   db_subnet_group_name   = aws_db_subnet_group.rds.name
   vpc_security_group_ids = [aws_security_group.rds.id]
+  tags                   = {
+    ResourceGroup = "apnmt-aws"
+  }
 }

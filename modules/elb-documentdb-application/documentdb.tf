@@ -17,7 +17,8 @@ resource "aws_security_group" "documentdb" {
   }
 
   tags = {
-    Environment = var.environment
+    Environment   = var.environment
+    ResourceGroup = "apnmt-aws"
   }
 }
 
@@ -26,7 +27,8 @@ resource "aws_docdb_subnet_group" "documentdb" {
   subnet_ids = var.private_subnets
 
   tags = {
-    Environment = var.environment
+    Environment   = var.environment
+    ResourceGroup = "apnmt-aws"
   }
 }
 
@@ -42,6 +44,9 @@ resource "aws_docdb_cluster_instance" "service" {
   identifier         = "${var.application_name}-documentdb-${var.environment}-${count.index}"
   cluster_identifier = aws_docdb_cluster.documentdb-cluster.id
   instance_class     = var.docdb_instance_type
+  tags               = {
+    ResourceGroup = "apnmt-aws"
+  }
 }
 
 resource "aws_docdb_cluster" "documentdb-cluster" {
@@ -54,6 +59,9 @@ resource "aws_docdb_cluster" "documentdb-cluster" {
   master_password                 = random_string.documentdb-db-password.result
   db_cluster_parameter_group_name = aws_docdb_cluster_parameter_group.documentdb.name
   vpc_security_group_ids          = [aws_security_group.documentdb.id]
+  tags                            = {
+    ResourceGroup = "apnmt-aws"
+  }
 }
 
 resource "aws_docdb_cluster_parameter_group" "documentdb" {

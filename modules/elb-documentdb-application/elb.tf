@@ -1,6 +1,9 @@
 # Create elastic beanstalk application
 resource "aws_elastic_beanstalk_application" "application" {
   name = var.application_name
+  tags = {
+    ResourceGroup = "apnmt-aws"
+  }
 }
 
 # Create elastic beanstalk application version
@@ -9,6 +12,9 @@ resource "aws_elastic_beanstalk_application_version" "version" {
   application = aws_elastic_beanstalk_application.application.name
   bucket      = var.s3_bucket_id
   key         = "${var.application_name}.jar"
+  tags        = {
+    ResourceGroup = "apnmt-aws"
+  }
 }
 
 # Create elastic beanstalk Environment
@@ -18,6 +24,9 @@ resource "aws_elastic_beanstalk_environment" "environment" {
   version_label       = aws_elastic_beanstalk_application_version.version.name
   solution_stack_name = var.solution_stack_name
   tier                = var.tier
+  tags                = {
+    ResourceGroup = "apnmt-aws"
+  }
 
   setting {
     namespace = "aws:ec2:vpc"

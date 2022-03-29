@@ -15,6 +15,10 @@ resource "aws_lambda_function" "lambda" {
   environment {
     variables = var.environment_variables
   }
+
+  tags = {
+    ResourceGroup = "apnmt-aws"
+  }
 }
 
 resource "aws_iam_role" "lambda_role" {
@@ -39,6 +43,10 @@ resource "aws_cloudwatch_log_group" "lambda" {
   name = "/aws/lambda/${aws_lambda_function.lambda.function_name}"
 
   retention_in_days = 30
+
+  tags = {
+    ResourceGroup = "apnmt-aws"
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_policy" {

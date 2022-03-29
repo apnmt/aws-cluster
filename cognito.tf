@@ -1,5 +1,8 @@
 resource "aws_cognito_user_pool" "apnmt_user_pool" {
   name = "apnmtUserPool"
+  tags = {
+    ResourceGroup = "apnmt-aws"
+  }
 }
 
 resource "aws_cognito_user_pool_client" "apnmt_user_pool_client" {
