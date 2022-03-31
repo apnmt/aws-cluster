@@ -162,6 +162,6 @@ resource "aws_elastic_beanstalk_environment" "environment" {
   setting {
     name      = "SPRING_DATASOURCE_URL"
     namespace = "aws:elasticbeanstalk:application:environment"
-    value     = "jdbc:postgresql://${aws_db_instance.rds-instance.address}:${aws_db_instance.rds-instance.port}/${aws_db_instance.rds-instance.name}"
+    value     = "jdbc:postgresql://${aws_db_instance.rds-instance.address}:${aws_db_instance.rds-instance.port}/${aws_db_instance.rds-instance.name}?stringtype=unspecified"
   }
 }
