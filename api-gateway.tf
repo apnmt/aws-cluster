@@ -28,6 +28,7 @@ resource "aws_api_gateway_deployment" "deployment" {
       aws_api_gateway_integration.organization_closing_times_integration.id,
       aws_api_gateway_integration.organization_opening_hours_integration.id,
       aws_api_gateway_integration.organization_working_hours_integration.id,
+      aws_api_gateway_integration.organization_employees_integration.id,
       aws_api_gateway_integration.organizationappointment_any_integration.id,
       aws_api_gateway_integration.organizationappointment_slots_integration.id,
       aws_api_gateway_integration.payment_any_integration.id,
