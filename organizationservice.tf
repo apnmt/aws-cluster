@@ -256,7 +256,7 @@ resource "aws_api_gateway_integration" "organization_employees_integration" {
 # Organization Activation Queue #
 #################
 resource "aws_sqs_queue" "organization-activation-queue" {
-  name                       = "service-queue"
+  name                       = "organization-activation-queue"
   visibility_timeout_seconds = 300
 
   tags = {
