@@ -291,3 +291,51 @@ resource "aws_api_gateway_integration" "appointment_services_get_integration" {
     "integration.request.path.proxy" = "method.request.path.proxy"
   }
 }
+
+resource "aws_api_gateway_method" "appointment_customers_delete" {
+  rest_api_id        = aws_api_gateway_rest_api.api.id
+  resource_id        = aws_api_gateway_resource.appointment_customers.id
+  http_method        = "DELETE"
+  authorization      = "CUSTOM"
+  authorizer_id      = aws_api_gateway_authorizer.authorizer.id
+  request_parameters = {
+    "method.request.path.proxy" = true
+  }
+}
+
+resource "aws_api_gateway_integration" "appointment_customers_delete_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.api.id
+  resource_id             = aws_api_gateway_resource.appointment_customers.id
+  http_method             = aws_api_gateway_method.appointment_customers_delete.http_method
+  integration_http_method = "DELETE"
+  type                    = "HTTP_PROXY"
+  uri                     = "http://${module.appointmentservice-application.elb_endpoint_url}/api/customers"
+
+  request_parameters = {
+    "integration.request.path.proxy" = "method.request.path.proxy"
+  }
+}
+
+resource "aws_api_gateway_method" "appointment_appointments_delete" {
+  rest_api_id        = aws_api_gateway_rest_api.api.id
+  resource_id        = aws_api_gateway_resource.appointment_appointments.id
+  http_method        = "DELETE"
+  authorization      = "CUSTOM"
+  authorizer_id      = aws_api_gateway_authorizer.authorizer.id
+  request_parameters = {
+    "method.request.path.proxy" = true
+  }
+}
+
+resource "aws_api_gateway_integration" "appointment_appointments_delete_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.api.id
+  resource_id             = aws_api_gateway_resource.appointment_appointments.id
+  http_method             = aws_api_gateway_method.appointment_appointments_delete.http_method
+  integration_http_method = "DELETE"
+  type                    = "HTTP_PROXY"
+  uri                     = "http://${module.appointmentservice-application.elb_endpoint_url}/api/appointments"
+
+  request_parameters = {
+    "integration.request.path.proxy" = "method.request.path.proxy"
+  }
+}
