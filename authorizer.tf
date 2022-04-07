@@ -12,7 +12,7 @@ module "authorizer-application" {
   environment_variables = {
     TABLE_NAME           = aws_dynamodb_table.auth-policy-store.name,
     AWS_LAMBDA_REGION    = var.region,
-    COGNITO_USER_POOL_ID = aws_cognito_user_pool.apnmt_user_pool.id
+    COGNITO_USER_POOL_ID = data.aws_cognito_user_pools.apnmt_user_pool.id
   }
 }
 
@@ -158,6 +158,15 @@ resource "aws_dynamodb_table_item" "manager" {
          },
          {
           "S": "arn:aws:execute-api:*:*:*/*/GET/service/payment/api/customers/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/DELETE/service/appointment/api/customers"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/DELETE/service/appointment/api/appointments"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/DELETE/service/organizationappointment/api/appointments"
          }
         ]
        },
@@ -247,6 +256,15 @@ resource "aws_dynamodb_table_item" "user" {
          },
          {
           "S": "arn:aws:execute-api:*:*:*/*/POST/service/payment/api/subscriptions/checkout"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/DELETE/service/appointment/api/customers"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/DELETE/service/appointment/api/appointments"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/DELETE/service/organizationappointment/api/appointments"
          }
         ]
        },
