@@ -41,6 +41,12 @@ resource "aws_api_gateway_resource" "organizations" {
   path_part   = "organizations"
 }
 
+resource "aws_api_gateway_resource" "organizations_proxy" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  parent_id   = aws_api_gateway_resource.organizations.id
+  path_part   = "{proxy+}"
+}
+
 resource "aws_api_gateway_method" "organization_any" {
   rest_api_id        = aws_api_gateway_rest_api.api.id
   resource_id        = aws_api_gateway_resource.organization_proxy.id
@@ -52,9 +58,19 @@ resource "aws_api_gateway_method" "organization_any" {
   }
 }
 
-resource "aws_api_gateway_method" "organization_get" {
+resource "aws_api_gateway_method" "organizations_get" {
   rest_api_id        = aws_api_gateway_rest_api.api.id
   resource_id        = aws_api_gateway_resource.organizations.id
+  http_method        = "GET"
+  authorization      = "NONE"
+  request_parameters = {
+    "method.request.path.proxy" = true
+  }
+}
+
+resource "aws_api_gateway_method" "organization_get" {
+  rest_api_id        = aws_api_gateway_rest_api.api.id
+  resource_id        = aws_api_gateway_resource.organizations_proxy.id
   http_method        = "GET"
   authorization      = "NONE"
   request_parameters = {
@@ -75,13 +91,26 @@ resource "aws_api_gateway_integration" "organization_any_integration" {
   }
 }
 
-resource "aws_api_gateway_integration" "organization_get_integration" {
+resource "aws_api_gateway_integration" "organizations_get_integration" {
   rest_api_id             = aws_api_gateway_rest_api.api.id
   resource_id             = aws_api_gateway_resource.organizations.id
-  http_method             = aws_api_gateway_method.organization_get.http_method
+  http_method             = aws_api_gateway_method.organizations_get.http_method
   integration_http_method = "GET"
   type                    = "HTTP_PROXY"
   uri                     = "http://${module.organizationservice-application.elb_endpoint_url}/api/organizations"
+
+  request_parameters = {
+    "integration.request.path.proxy" = "method.request.path.proxy"
+  }
+}
+
+resource "aws_api_gateway_integration" "organization_get_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.api.id
+  resource_id             = aws_api_gateway_resource.organizations_proxy.id
+  http_method             = aws_api_gateway_method.organization_get.http_method
+  integration_http_method = "GET"
+  type                    = "HTTP_PROXY"
+  uri                     = "http://${module.organizationservice-application.elb_endpoint_url}/api/organizations/{proxy}"
 
   request_parameters = {
     "integration.request.path.proxy" = "method.request.path.proxy"
@@ -92,6 +121,30 @@ resource "aws_api_gateway_resource" "organization_opening_hours" {
   rest_api_id = aws_api_gateway_rest_api.api.id
   parent_id   = aws_api_gateway_resource.organization_api_resource.id
   path_part   = "opening-hours"
+}
+
+resource "aws_api_gateway_method" "organization_opening_hours_post" {
+  rest_api_id        = aws_api_gateway_rest_api.api.id
+  resource_id        = aws_api_gateway_resource.organization_opening_hours.id
+  http_method        = "POST"
+  authorization      = "CUSTOM"
+  authorizer_id      = aws_api_gateway_authorizer.authorizer.id
+  request_parameters = {
+    "method.request.path.proxy" = true
+  }
+}
+
+resource "aws_api_gateway_integration" "organization_opening_hours_integration_post" {
+  rest_api_id             = aws_api_gateway_rest_api.api.id
+  resource_id             = aws_api_gateway_resource.organization_opening_hours.id
+  http_method             = aws_api_gateway_method.organization_opening_hours_post.http_method
+  integration_http_method = "POST"
+  type                    = "HTTP_PROXY"
+  uri                     = "http://${module.organizationservice-application.elb_endpoint_url}/api/opening-hours"
+
+  request_parameters = {
+    "integration.request.path.proxy" = "method.request.path.proxy"
+  }
 }
 
 resource "aws_api_gateway_resource" "organization_opening_hours_organization" {
@@ -133,6 +186,30 @@ resource "aws_api_gateway_resource" "organization_working_hours" {
   rest_api_id = aws_api_gateway_rest_api.api.id
   parent_id   = aws_api_gateway_resource.organization_api_resource.id
   path_part   = "working-hours"
+}
+
+resource "aws_api_gateway_method" "organization_working_hours_post" {
+  rest_api_id        = aws_api_gateway_rest_api.api.id
+  resource_id        = aws_api_gateway_resource.organization_working_hours.id
+  http_method        = "POST"
+  authorization      = "CUSTOM"
+  authorizer_id      = aws_api_gateway_authorizer.authorizer.id
+  request_parameters = {
+    "method.request.path.proxy" = true
+  }
+}
+
+resource "aws_api_gateway_integration" "organization_working_hours_post_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.api.id
+  resource_id             = aws_api_gateway_resource.organization_working_hours.id
+  http_method             = aws_api_gateway_method.organization_working_hours_post.http_method
+  integration_http_method = "POST"
+  type                    = "HTTP_PROXY"
+  uri                     = "http://${module.organizationservice-application.elb_endpoint_url}/api/working-hours"
+
+  request_parameters = {
+    "integration.request.path.proxy" = "method.request.path.proxy"
+  }
 }
 
 resource "aws_api_gateway_resource" "organization_working_hours_organization" {
@@ -215,6 +292,30 @@ resource "aws_api_gateway_resource" "organization_employees" {
   rest_api_id = aws_api_gateway_rest_api.api.id
   parent_id   = aws_api_gateway_resource.organization_api_resource.id
   path_part   = "employees"
+}
+
+resource "aws_api_gateway_method" "organization_employees_post" {
+  rest_api_id        = aws_api_gateway_rest_api.api.id
+  resource_id        = aws_api_gateway_resource.organization_employees.id
+  http_method        = "POST"
+  authorization      = "CUSTOM"
+  authorizer_id      = aws_api_gateway_authorizer.authorizer.id
+  request_parameters = {
+    "method.request.path.proxy" = true
+  }
+}
+
+resource "aws_api_gateway_integration" "organization_employees_integration_post" {
+  rest_api_id             = aws_api_gateway_rest_api.api.id
+  resource_id             = aws_api_gateway_resource.organization_employees.id
+  http_method             = aws_api_gateway_method.organization_employees_post.http_method
+  integration_http_method = "POST"
+  type                    = "HTTP_PROXY"
+  uri                     = "http://${module.organizationservice-application.elb_endpoint_url}/api/employees"
+
+  request_parameters = {
+    "integration.request.path.proxy" = "method.request.path.proxy"
+  }
 }
 
 resource "aws_api_gateway_resource" "organization_employees_organization" {

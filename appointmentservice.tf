@@ -117,7 +117,7 @@ resource "aws_api_gateway_integration" "appointment_appointments_put_integration
   }
 }
 
-resource "aws_api_gateway_method" "appointment_appointments_delete" {
+resource "aws_api_gateway_method" "appointment_appointment_delete" {
   rest_api_id        = aws_api_gateway_rest_api.api.id
   resource_id        = aws_api_gateway_resource.appointment_appointments_proxy.id
   http_method        = "DELETE"
@@ -127,10 +127,10 @@ resource "aws_api_gateway_method" "appointment_appointments_delete" {
   }
 }
 
-resource "aws_api_gateway_integration" "appointment_appointments_delete_integration" {
+resource "aws_api_gateway_integration" "appointment_appointment_delete_integration" {
   rest_api_id             = aws_api_gateway_rest_api.api.id
   resource_id             = aws_api_gateway_resource.appointment_appointments_proxy.id
-  http_method             = aws_api_gateway_method.appointment_appointments_delete.http_method
+  http_method             = aws_api_gateway_method.appointment_appointment_delete.http_method
   integration_http_method = "DELETE"
   type                    = "HTTP_PROXY"
   uri                     = "http://${module.appointmentservice-application.elb_endpoint_url}/api/appointments/{proxy}"
@@ -261,6 +261,30 @@ resource "aws_api_gateway_resource" "appointment_services" {
   rest_api_id = aws_api_gateway_rest_api.api.id
   parent_id   = aws_api_gateway_resource.appointment_api.id
   path_part   = "services"
+}
+
+resource "aws_api_gateway_method" "appointment_services_post" {
+  rest_api_id        = aws_api_gateway_rest_api.api.id
+  resource_id        = aws_api_gateway_resource.appointment_services.id
+  http_method        = "POST"
+  authorization      = "CUSTOM"
+  authorizer_id      = aws_api_gateway_authorizer.authorizer.id
+  request_parameters = {
+    "method.request.path.proxy" = true
+  }
+}
+
+resource "aws_api_gateway_integration" "appointment_services_post_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.api.id
+  resource_id             = aws_api_gateway_resource.appointment_services.id
+  http_method             = aws_api_gateway_method.appointment_services_post.http_method
+  integration_http_method = "POST"
+  type                    = "HTTP_PROXY"
+  uri                     = "http://${module.appointmentservice-application.elb_endpoint_url}/api/services"
+
+  request_parameters = {
+    "integration.request.path.proxy" = "method.request.path.proxy"
+  }
 }
 
 resource "aws_api_gateway_resource" "appointment_services_proxy" {
