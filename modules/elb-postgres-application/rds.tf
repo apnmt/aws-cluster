@@ -40,7 +40,7 @@ resource "random_string" "rds-db-password" {
 
 resource "aws_db_instance" "rds-instance" {
   identifier             = "${var.application_name}-db-${var.environment}"
-  name                   = var.application_name
+  db_name                = var.application_name
   instance_class         = var.db_instance_type
   allocated_storage      = 5
   engine                 = "postgres"
