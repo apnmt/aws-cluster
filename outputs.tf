@@ -5,12 +5,12 @@ output "api_gateway_invoke_url" {
 
 output "cognito_user_pool_id" {
   description = "User Pool Id"
-  value       = aws_cognito_user_pool.apnmt_user_pool.id
+  value       = data.aws_cognito_user_pools.apnmt_user_pool.ids.0
 }
 
 output "cognito_user_pool_client_id" {
   description = "User Pool Client Id"
-  value       = aws_cognito_user_pool_client.apnmt_user_pool_client.id
+  value       = data.aws_cognito_user_pool_clients.apnmt_user_pool_client.client_ids.0
 }
 
 output "appointmentservice_endpoint_url" {

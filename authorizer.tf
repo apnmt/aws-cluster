@@ -12,7 +12,7 @@ module "authorizer-application" {
   environment_variables = {
     TABLE_NAME           = aws_dynamodb_table.auth-policy-store.name,
     AWS_LAMBDA_REGION    = var.region,
-    COGNITO_USER_POOL_ID = data.aws_cognito_user_pools.apnmt_user_pool.id
+    COGNITO_USER_POOL_ID = data.aws_cognito_user_pools.apnmt_user_pool.ids.0
   }
 }
 
@@ -123,6 +123,18 @@ resource "aws_dynamodb_table_item" "manager" {
          },
          {
           "S": "arn:aws:execute-api:*:*:*/*/ANY/service/organization/**"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/POST/service/organization/api/working-hours"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/POST/service/organization/api/opening-hours"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/POST/service/organization/api/employees"
+         },
+         {
+          "S": "arn:aws:execute-api:*:*:*/*/POST/service/appointment/api/services"
          }
         ]
        },

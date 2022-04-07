@@ -12,7 +12,7 @@ module "authservice-application" {
   environment_variables = {
     ACCESS_KEY           = var.aws_access_key,
     SECRET_KEY           = var.aws_secret_key,
-    COGNITO_USER_POOL_ID = aws_cognito_user_pool.apnmt_user_pool.id
+    COGNITO_USER_POOL_ID = data.aws_cognito_user_pools.apnmt_user_pool.ids.0
   }
 }
 
