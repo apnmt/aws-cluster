@@ -12,6 +12,8 @@ module "organizationservice-application" {
   region           = var.region
   aws_access_key   = var.aws_access_key
   aws_secret_key   = var.aws_secret_key
+  min_size         = 1
+  max_size         = 3
 }
 
 ###############

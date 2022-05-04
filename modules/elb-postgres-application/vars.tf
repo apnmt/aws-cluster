@@ -30,15 +30,15 @@ variable "min_size" {
 }
 variable "max_size" {
   type    = number
-  default = 2
+  default = 3
 }
-variable "cpu_lower_threshold" {
+variable "lower_threshold" {
   type    = number
-  default = 10
+  default = 0.5
 }
-variable "cpu_upper_threshold" {
+variable "upper_threshold" {
   type    = number
-  default = 50
+  default = 1
 }
 variable "vpc_id" {
   type = string

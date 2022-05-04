@@ -12,6 +12,8 @@ module "organization-appointmentservice-application" {
   region              = var.region
   aws_access_key      = var.aws_access_key
   aws_secret_key      = var.aws_secret_key
+  min_size            = 1
+  max_size            = 3
 }
 
 ###############
@@ -111,7 +113,7 @@ resource "aws_api_gateway_integration" "organizationappointment_appointments_del
   http_method             = aws_api_gateway_method.organizationappointment_appointments_delete.http_method
   integration_http_method = "DELETE"
   type                    = "HTTP_PROXY"
-  uri                     = "http://${module.appointmentservice-application.elb_endpoint_url}/api/appointments"
+  uri                     = "http://${module.organization-appointmentservice-application.elb_endpoint_url}/api/appointments"
 
   request_parameters = {
     "integration.request.path.proxy" = "method.request.path.proxy"

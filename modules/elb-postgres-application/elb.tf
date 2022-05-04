@@ -82,22 +82,22 @@ resource "aws_elastic_beanstalk_environment" "environment" {
   setting {
     namespace = "aws:autoscaling:trigger"
     name      = "MeasureName"
-    value     = "CPUUtilization"
+    value     = "TargetResponseTime"
   }
   setting {
     namespace = "aws:autoscaling:trigger"
     name      = "Unit"
-    value     = "Percent"
+    value     = "Seconds"
   }
   setting {
     namespace = "aws:autoscaling:trigger"
     name      = "UpperThreshold"
-    value     = var.cpu_upper_threshold
+    value     = var.upper_threshold
   }
   setting {
     namespace = "aws:autoscaling:trigger"
     name      = "LowerThreshold"
-    value     = var.cpu_lower_threshold
+    value     = var.lower_threshold
   }
   setting {
     namespace = "aws:autoscaling:trigger"
@@ -107,7 +107,7 @@ resource "aws_elastic_beanstalk_environment" "environment" {
   setting {
     namespace = "aws:autoscaling:trigger"
     name      = "EvaluationPeriods"
-    value     = 3
+    value     = 1
   }
   setting {
     namespace = "aws:elasticbeanstalk:healthreporting:system"

@@ -40,7 +40,7 @@ resource "random_string" "documentdb-db-password" {
 }
 
 resource "aws_docdb_cluster_instance" "service" {
-  count              = 1
+  count              = 4
   identifier         = "${var.application_name}-documentdb-${var.environment}-${count.index}"
   cluster_identifier = aws_docdb_cluster.documentdb-cluster.id
   instance_class     = var.docdb_instance_type
